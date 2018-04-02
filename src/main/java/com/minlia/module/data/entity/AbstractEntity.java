@@ -5,8 +5,8 @@ package com.minlia.module.data.entity;
 //import org.springframework.data.annotation.LastModifiedBy;
 //import org.springframework.data.annotation.LastModifiedDate;
 
-import javax.validation.constraints.NotNull;
 import java.util.Date;
+import javax.validation.constraints.NotNull;
 
 //@JsonInclude(JsonInclude.Include.NON_NULL)
 //@JsonAutoDetect(
@@ -17,51 +17,51 @@ import java.util.Date;
 //        creatorVisibility = JsonAutoDetect.Visibility.NONE)
 public abstract class AbstractEntity extends WithIdEntity {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-//    @CreatedBy
-    @NotNull
-    private String createdBy;
+  //    @CreatedBy
+  @NotNull
+  private String createdBy;
 
-//    @CreatedDate
-    @NotNull
-    private Date createdDate = new Date();
+  //    @CreatedDate
+  @NotNull
+  private Date createdDate = new Date();
 
-//    @LastModifiedBy
-    private String lastModifiedBy;
+  //    @LastModifiedBy
+  private String lastModifiedBy;
 
-//    @LastModifiedDate
-    private Date lastModifiedDate = new Date();
+  //    @LastModifiedDate
+  private Date lastModifiedDate = new Date();
 
-    public String getCreatedBy() {
-        return createdBy;
-    }
+  public String getCreatedBy() {
+    return createdBy;
+  }
 
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
+  public void setCreatedBy(String createdBy) {
+    this.createdBy = createdBy;
+  }
 
-    public Date getCreateDate() {
-        return createdDate;
-    }
+  public Date getCreateDate() {
+    return createdDate;
+  }
 
-    public void setCreateDate(Date createDate) {
-        this.createdDate = createDate;
-    }
+  public void setCreateDate(Date createDate) {
+    this.createdDate = createDate;
+  }
 
-    public String getLastModifiedBy() {
-        return lastModifiedBy;
-    }
+  public String getLastModifiedBy() {
+    return lastModifiedBy;
+  }
 
-    public void setLastModifiedBy(String lastModifiedBy) {
-        this.lastModifiedBy = lastModifiedBy;
-    }
+  public void setLastModifiedBy(String lastModifiedBy) {
+    this.lastModifiedBy = lastModifiedBy;
+  }
 
-    public Date getLastModifiedDate() {
-        return lastModifiedDate;
-    }
+  public Date getLastModifiedDate() {
+    return lastModifiedDate;
+  }
 
-    public void setLastModifiedDate(Date lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
+  public void setLastModifiedDate(Date lastModifiedDate) {
+    this.lastModifiedDate = lastModifiedDate;
+  }
 }
