@@ -1,58 +1,41 @@
-spring-boot-start-oss
-===================================
-Spring boot with aliyun oss support
+# 数据访问自动化  
 
-### usage
-in pom.xml add following dependency:
-
-      <dependency>
-           <groupId>org.mvnsearch.boot</groupId>
-           <artifactId>spring-boot-starter-oss</artifactId>
-           <version>1.0.0-SNAPSHOT</version>
-      </dependency>
-      
-in application.properties file, please add following keys:
-
-     spring.oss.key=xxxx
-     spring.oss.secret=yyyy
-     spring.oss.bucket=xxx-dev
-     
-in your code you can use OssClient directly:
-
-     @Autowired
-     OSSClient ossClient;
-
-you can use FileStorageService API to operate file:
-
-     @Autowired
-     FileStorageService fileStorageService;
-
-### Spring XML Configuration
-If you want to setup bean in Spring xml file, please use following code:
-
-     <bean id="ossClient" class="com.aliyun.oss.OSSClient">
-          <constructor-arg value="access_key"/>
-          <constructor-arg value="access_secret"/>
-     </bean>
-          
-     <bean id="fileStorageService" class="org.mvnsearch.boot.oss.impl.FileStorageServiceOssImpl">
-          <property name="secret" value="access_key"/>
-          <property name="accessSecret" value="access_key"/>
-          <property name="bucket" value="bucket_name"/>
-     </bean>
-     
-### spring-boot-start-oss service List
-
-* com.minlia.modules.starter.oss.FileStorageService: API to operate the file
-* com.aliyun.oss.OSSClient: aliyun OSSClient
-
-Please use FileStorageService as usual, not OSSClient.
-     
-### Aliyun OSS endpoint
-
-Please visit http://localhost:8080/oss to view detail information.
+结合mybatis与mybatisplus框架提供的强大功能，提供数据访问自动化的能力
 
 
-### FaQ
+## 集成到自已的项目时添加依赖项    
 
-* Please upload a "ok.txt" under your buket for health indicator.
+```pom
+<dependency>
+  <groupId>com.minlia.cloud.starter</groupId>
+  <artifactId>cloud-starter-data</artifactId>
+  <version>2.0.0.RELEASE</version>
+</dependency>
+```
+## 后端Endpoint层代码
+
+```
+  @PostMapping(value = "/api/status/post")
+  @ApiOperation(value = "状态", notes = "测试提交", httpMethod = "POST")
+  public StatefulBody postStatus(@RequestBody WithIdBody body) {
+    Assertion.is(true, ApiCode.ACCOUNT_DISABLED);
+    return SuccessResponseBody.builder().build();
+  }
+```
+
+## 返回报文示例
+
+```
+{
+  "payload":{
+    "id":33333333333,
+    "balance":228866.00
+  }
+  "code": 1,//业务返回码
+  "message": "OK",//业务返回释义
+  "requestId": "cZCu5aAftUn2ivn2rcKb2YUhb6N7ijP420180402212405106502",//当前请求编号
+  "status": 200,//请求的http状态码
+  "timestamp": 1522675445311//当前请求时间戳
+}
+```
+
