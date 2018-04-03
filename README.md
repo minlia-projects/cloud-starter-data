@@ -2,6 +2,10 @@
 
 结合mybatis与mybatisplus框架提供的强大功能，提供数据访问自动化的能力
 
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.minlia.cloud.starter/cloud-starter-data/badge.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/com.minlia.cloud.starter/cloud-starter-data/) 
+[![Apache License 2](https://img.shields.io/badge/license-ASF2-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.txt) 
+[![Build Status](https://travis-ci.org/minlia-projects/cloud-starter-data.svg?branch=master)](https://travis-ci.org/minlia-projects/cloud-starter-data)
+[![Waffle.io - Columns and their card count](https://badge.waffle.io/minlia-projects/cloud-starter-data.svg?columns=all)](https://waffle.io/minlia-projects/cloud-starter-data)
 
 ## 集成到自已的项目时添加依赖项    
 
