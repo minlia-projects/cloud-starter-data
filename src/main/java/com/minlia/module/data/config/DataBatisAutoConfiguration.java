@@ -4,6 +4,9 @@ import com.baomidou.mybatisplus.plugins.OptimisticLockerInterceptor;
 import com.baomidou.mybatisplus.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.plugins.PerformanceInterceptor;
 import com.baomidou.mybatisplus.plugins.SqlExplainInterceptor;
+import com.minlia.module.data.batis.event.publisher.AfterCreatedEventPublisher;
+import com.minlia.module.data.batis.event.publisher.BeforeCreatedEventPublisher;
+import com.minlia.module.data.batis.interceptor.CreatedMethodInterceptor;
 import com.minlia.module.data.scope.DataScopeInterceptor;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -27,6 +30,29 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class DataBatisAutoConfiguration {
 
 
+
+  @Bean
+  @ConditionalOnMissingBean
+  public CreatedMethodInterceptor createdMethodInterceptor(){
+    return new CreatedMethodInterceptor();
+  }
+
+
+
+  @Bean
+  @ConditionalOnMissingBean
+  public AfterCreatedEventPublisher afterCreatedEventPublisher(){
+    return new AfterCreatedEventPublisher();
+  }
+
+
+  @Bean
+  @ConditionalOnMissingBean
+  public BeforeCreatedEventPublisher beforeCreatedEventPublisher(){
+    return new BeforeCreatedEventPublisher();
+  }
+
+
   /**
    * mybatis-plus SQL执行效率插件【生产环境可以关闭】
    */
@@ -41,6 +67,7 @@ public class DataBatisAutoConfiguration {
 //    public DimensionInterceptor dimensionInterceptor() {
 //        return new DimensionInterceptor();
 //    }
+
   @Bean
   @ConditionalOnMissingBean
   @Profile("!production")
