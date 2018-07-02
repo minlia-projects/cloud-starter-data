@@ -4,7 +4,7 @@
 
   <groupId>com.minlia.cloud.starter</groupId>
   <artifactId>cloud-starter-data</artifactId>
-  <version>2.0.1-SNAPSHOT</version>
+  <version>2.0.2-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>Cloud Starter Data</name>
@@ -13,7 +13,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.0.1.RELEASE</version>
+    <version>2.0.2.RELEASE</version>
     <relativePath /> <!-- lookup parent from repository -->
   </parent>
 
@@ -35,8 +35,7 @@
     <springdata.commons.version>1.13.6.RELEASE</springdata.commons.version>
 
     <swagger.version>2.5.0</swagger.version>
-    <mybatis-plus-boot-starter.version>2.2.0</mybatis-plus-boot-starter.version>
-    <mybatisplus.version>2.2.0</mybatisplus.version>
+    <mybatis-plus-boot-starter.version>2.3</mybatis-plus-boot-starter.version>
 
 
   </properties>
@@ -114,6 +113,21 @@
       <optional>true</optional>
     </dependency>
 
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+
+
+
+    <dependency>
+      <groupId>io.swagger</groupId>
+      <artifactId>swagger-annotations</artifactId>
+      <version>1.5.13</version>
+      <optional>true</optional>
+    </dependency>
+
+
 
     <dependency>
       <groupId>javax.servlet</groupId>
@@ -134,11 +148,6 @@
       <version>2.0.0.RELEASE</version>
     </dependency>
 
-    <dependency>
-      <groupId>com.baomidou</groupId>
-      <artifactId>mybatis-plus</artifactId>
-      <version>${mybatisplus.version}</version>
-    </dependency>
 
     <dependency>
       <groupId>com.baomidou</groupId>
@@ -153,7 +162,7 @@
       <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
-        <version>2.0.1.RELEASE</version>
+        <version>2.0.2.RELEASE</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>

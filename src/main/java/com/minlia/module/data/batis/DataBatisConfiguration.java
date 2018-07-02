@@ -1,4 +1,4 @@
-package com.minlia.module.data.config;
+package com.minlia.module.data.batis;
 
 import com.baomidou.mybatisplus.plugins.OptimisticLockerInterceptor;
 import com.baomidou.mybatisplus.plugins.PaginationInterceptor;
@@ -8,28 +8,11 @@ import com.minlia.module.data.batis.event.publisher.AfterCreatedEventPublisher;
 import com.minlia.module.data.batis.event.publisher.BeforeCreatedEventPublisher;
 import com.minlia.module.data.batis.interceptor.CreatedMethodInterceptor;
 import com.minlia.module.data.scope.DataScopeInterceptor;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-/**
- * Minlia Data Auto Configuration
- */
-
-//@EnableAutoConfiguration
-@ComponentScan(basePackages = "com.minlia.*")
-@MapperScan(basePackages = {"com.minlia.**.mapper", ".**.dao"})
-
-@Configuration
-//@ConditionalOnClass(com.minlia.cloud.autoconfiguration.MinliaCloudAutoConfiguration.class)
-@EnableTransactionManagement
-public class DataBatisAutoConfiguration {
-
-
+public class DataBatisConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
@@ -139,5 +122,4 @@ public class DataBatisAutoConfiguration {
 //        });
     return paginationInterceptor;
   }
-
 }

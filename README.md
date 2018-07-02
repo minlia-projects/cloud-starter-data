@@ -1,5 +1,51 @@
 # 数据访问自动化  
 
+同时启用Mybatis与Data Jpa
+
+
+```
+@Data
+@Entity
+@Table(name = TABLE_NAME)
+@TableName(TABLE_NAME)
+public class Role extends AbstractEntity {
+
+    private static final String TABLE_NAME="system_role";
+
+    /**
+     * 忽略掉集合类型
+     */
+    @Transient
+    @TableField(exist=false)
+    @ApiModelProperty(value = "权限集合")
+    private List<Permission> permissions;
+}
+
+```
+
+
+
+与单独的JPA使用时不同的是需要独立出中间对象  
+新增一个Mapping后缀，定义为实体中间表
+
+```
+@Data
+@Entity
+@Table(name = TABLE_NAME)
+@TableName(TABLE_NAME)
+public class RolePermissionMapping extends AbstractEntity {
+
+    private static final String TABLE_NAME="map_role_permission";
+
+    @ApiModelProperty(value = "角色id")
+    private String roleId;
+
+    @ApiModelProperty(value = "权限id")
+    private String permissionId;
+}
+```
+
+
 结合mybatis与mybatisplus框架提供的强大功能，提供数据访问自动化的能力
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.minlia.cloud.starter/cloud-starter-data/badge.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/com.minlia.cloud.starter/cloud-starter-data/) 
