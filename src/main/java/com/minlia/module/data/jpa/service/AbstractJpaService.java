@@ -4,10 +4,10 @@ package com.minlia.module.data.jpa.service;
 import com.minlia.module.data.adapter.PageResponseBodyAdapter;
 import com.minlia.module.data.body.AbstractQueryRequestBody;
 import com.minlia.module.data.body.PageResponseBody;
+import com.minlia.module.data.interfaces.IRawService;
 import com.minlia.module.data.jpa.abstraction.AbstractRepository;
 import com.minlia.module.data.service.AbstractFindService;
 import java.io.Serializable;
-import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -18,17 +18,114 @@ import org.springframework.data.jpa.domain.Specification;
  */
 //JDK8函数式接口注解 仅能包含一个抽象方法
 //@FunctionalInterface
-public interface AbstractJpaService<ENTITY, ID extends Serializable, QUERY extends AbstractQueryRequestBody> extends
+public interface AbstractJpaService<ENTITY extends Serializable, ID extends Serializable, QUERY extends AbstractQueryRequestBody> extends
     //with find service support
-    AbstractFindService<ENTITY, QUERY> {
+    AbstractFindService<ENTITY, QUERY>,IRawService<ENTITY,ID> {
 
   public AbstractRepository<ENTITY, ID> getJpaRepository();
 
+
   /**
-   * 搜索条件应该由后台服务控制，所以都在实现类里面进行条件组装
+   * 根据ID获取
    */
-  public Specification<ENTITY> getSpecification(
-      QUERY queryRequestBody);
+  @Override
+  public default ENTITY getOne(ID id) {
+    return getJpaRepository().getOne(id);
+  }
+
+  /**
+   * 保存
+   */
+  @Override
+  public default ENTITY save(ENTITY entity) {
+    return getJpaRepository().save(entity);
+  }
+
+  /**
+   * 批量保存与修改
+   */
+  @Override
+  public default Iterable<ENTITY> saveAll(Iterable<ENTITY> entities) {
+    return getJpaRepository().saveAll(entities);
+  }
+
+  /**
+   * 修改
+   */
+  @Override
+  public default ENTITY update(ENTITY entity) {
+    return getJpaRepository().saveAndFlush(entity);
+  }
+
+
+  /**
+   * 根据Id删除
+   */
+  @Override
+  public default Boolean deleteOne(ID id) {
+    getJpaRepository().deleteById(id);
+    return Boolean.TRUE;
+  }
+
+
+  /**
+   * 批量删除
+   */
+  @Override
+  public default Boolean deleteAll(Iterable<ID> ids) {
+    for(ID id:ids) {
+      getJpaRepository().deleteById(id);
+    }
+    return Boolean.TRUE;
+  }
+
+//
+//  /**
+//   * 清空数据库
+//   */
+//  public default Boolean deleteAll() {
+//    getJpaRepository().deleteAll();
+//    return Boolean.TRUE;
+//  }
+
+
+  /**
+   * 统计总数
+   * @return
+   */
+  @Override
+  public default Long count() {
+    return getJpaRepository().count();
+  }
+
+  /**
+   * ID是否存在
+   * @return
+   */
+  @Override
+  public default Boolean exists(ID id) {
+    return getJpaRepository().existsById(id);
+  }
+
+
+
+
+
+
+
+
+
+  //以下方法为 data 模块提供的功能
+
+
+
+
+
+
+
+
+
+
 
   /**
    * 搜索条件应该由后台服务控制，所以都在实现类里面进行条件组装
@@ -37,106 +134,46 @@ public interface AbstractJpaService<ENTITY, ID extends Serializable, QUERY exten
   public default PageResponseBody<ENTITY> findAll(QUERY queryRequestBody,
       Pageable pageable) {
     return PageResponseBodyAdapter.adapt(
-        getJpaRepository().findAll(getSpecification(queryRequestBody), pageable));
-  }
-
-  /**
-   * 根据ID获取
-   */
-  public default ENTITY get(ID id) {
-    return getJpaRepository().getOne(id);
-  }
-
-  /**
-   * 获取所有列表
-   */
-  public default List<ENTITY> getAll() {
-    return getJpaRepository().findAll();
-  }
-
-  /**
-   * 获取总数
-   */
-  public default Long getTotalCount() {
-    return getJpaRepository().count();
-  }
-
-  /**
-   * 保存
-   */
-  public default ENTITY save(ENTITY entity) {
-
-    return getJpaRepository().save(entity);
-  }
-
-  /**
-   * 修改
-   */
-  public default ENTITY update(ENTITY entity) {
-    return getJpaRepository().saveAndFlush(entity);
-  }
-
-  /**
-   * 批量保存与修改
-   */
-  public default Iterable<ENTITY> saveOrUpdateAll(Iterable<ENTITY> entities) {
-    return getJpaRepository().saveAll(entities);
-  }
-
-  /**
-   * 删除
-   */
-  public default void delete(ENTITY entity) {
-    getJpaRepository().delete(entity);
-  }
-
-  /**
-   * 根据Id删除
-   */
-  public default void delete(ID id) {
-    getJpaRepository().deleteById(id);
-  }
-
-  /**
-   * 批量删除
-   */
-  public default void delete(Iterable<ENTITY> entities) {
-    getJpaRepository().deleteAll(entities);
-  }
-
-  /**
-   * 清空缓存，提交持久化
-   */
-  public default void flush() {
-    getJpaRepository().flush();
-  }
-
-  /**
-   * 根据条件查询获取
-   */
-  public default List<ENTITY> findAll(Specification<ENTITY> spec) {
-    return getJpaRepository().findAll(spec);
-  }
-
-  /**
-   * 分页获取
-   */
-  public default org.springframework.data.domain.Page<ENTITY> findAll(Pageable pageable) {
-    return getJpaRepository().findAll(pageable);
-  }
-
-  /**
-   * 根据查询条件分页获取
-   */
-  public default org.springframework.data.domain.Page<ENTITY> findAll(Specification<ENTITY> spec,
-      Pageable pageable) {
-    return getJpaRepository().findAll(spec, pageable);
+        getJpaRepository().findAll(getFindAllSpecification(queryRequestBody), pageable));
   }
 
   /**
    * 获取查询条件的结果数
    */
-  public default long count(Specification<ENTITY> spec) {
-    return getJpaRepository().count(spec);
+  @Override
+  public default Long count(QUERY queryRequestBody) {
+    return getJpaRepository().count(getCountSpecification(queryRequestBody));
   }
+
+  /**
+   * 根据条件查询是否存在此实体，存在返回TRUE, 不存在返回FALSE
+   *
+   * @return
+   */
+  @Override
+  public default Boolean exists(QUERY queryRequestBody) {
+    return getJpaRepository().count(getExistsSpecification(queryRequestBody))>0?Boolean.TRUE:Boolean.FALSE;
+  }
+
+
+  /**
+   * 搜索条件应该由后台服务控制，所以都在实现类里面进行条件组装
+   */
+  public default Specification<ENTITY> getFindAllSpecification(
+      QUERY queryRequestBody){
+    return null;
+  }
+
+  public default Specification<ENTITY> getExistsSpecification(
+      QUERY queryRequestBody){
+    return null;
+  }
+
+  public default Specification<ENTITY> getCountSpecification(
+      QUERY queryRequestBody){
+    return null;
+  }
+
+
+
 }
