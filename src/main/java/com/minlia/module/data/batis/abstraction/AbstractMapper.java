@@ -11,5 +11,5 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface AbstractMapper<T> extends BaseMapper<T> {
 
-  List<?> pageList(Page page, @Param("ew") Wrapper<T> wrapper);
+//  List<?> pageList(Page page, @Param("ew") Wrapper<T> wrapper);
 }

@@ -1,11 +1,21 @@
 package com.minlia.module.data.batis.service;
 
-import com.baomidou.mybatisplus.mapper.Wrapper;
-import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.IService;
+import com.minlia.module.data.body.AbstractQueryRequestBody;
+import com.minlia.module.data.service.AbstractFindService;
 
-public interface AbstractBatisService<T> extends IService<T> {
+/**
+ * @author will
+ * @since 2.0.3
+ */
+public interface AbstractBatisService<ENTITY,QUERY extends AbstractQueryRequestBody> extends IService<ENTITY>,
+    //with find service support
+    AbstractFindService<ENTITY,QUERY> {
 
-  Page<T> pageList(Page<T> page, Wrapper<T> wrapper);
+  /**
+   * 搜索条件应该由后台服务控制，所以都在实现类里面进行条件拼装
+   */
+  public EntityWrapper<ENTITY> getSpecification(QUERY queryRequestBody);
 
 }

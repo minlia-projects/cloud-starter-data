@@ -9,6 +9,7 @@ import java.io.Serializable;
 /**
  * 为了适应与Mybatis的Mapper保持统一命名
  * @author will
+ * @since 2.0.3
  */
 @NoRepositoryBean
 public interface AbstractRepository<E, ID extends Serializable> extends JpaRepository<E, ID>, JpaSpecificationExecutor<E> {

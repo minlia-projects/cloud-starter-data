@@ -2,6 +2,7 @@ package com.minlia.module.data.entity;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,6 +26,7 @@ public abstract class WithIdEntity implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
+  @JsonProperty
   private Long id;//=String.valueOf(SnowFlakeUtil.getFlowIdInstance().nextId());;
 
 //  public Long getId() {
