@@ -3,14 +3,14 @@ package com.minlia.module.data.enumeration;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "数据状态")
+@ApiModel(value = "Status of data")
 public enum DataStatusEnumeration implements WithStatusEnumeration<Integer> {
 
-  @ApiModelProperty(value = "正常状态")
-  NORMARL(1),
-  @ApiModelProperty(value = "锁定状态")
+  @ApiModelProperty(value = "Normal")
+  NORMAL(1),
+  @ApiModelProperty(value = "Locked")
   LOCKED(2),
-  @ApiModelProperty(value = "删除状态")
+  @ApiModelProperty(value = "Deleted")
   DELETED(3)
   ;
 

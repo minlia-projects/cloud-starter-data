@@ -11,8 +11,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
-import lombok.Data;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -69,7 +67,7 @@ public abstract class AbstractEntity<ID extends Serializable> extends WithIdEnti
    */
   @PrePersist
   public void prePersist(){
-    this.setDataStatus(DataStatusEnumeration.NORMARL);
+    this.setDataStatus(DataStatusEnumeration.NORMAL);
     this.setCreatedDate(new Date());
     this.setLastModifiedDate(new Date());
     //TODO set as guid of current user
