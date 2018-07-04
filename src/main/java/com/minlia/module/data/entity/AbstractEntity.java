@@ -4,11 +4,13 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.minlia.module.data.enumeration.DataStatusEnumeration;
 import io.swagger.annotations.ApiModelProperty;
+import java.io.Serializable;
 import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.MappedSuperclass;
 import lombok.Data;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -27,10 +29,9 @@ import org.springframework.format.annotation.DateTimeFormat;
         isGetterVisibility = JsonAutoDetect.Visibility.NONE,
         creatorVisibility = JsonAutoDetect.Visibility.NONE)
 
-@Data
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class AbstractEntity extends WithIdEntity {
+public abstract class AbstractEntity<ID extends Serializable> extends WithIdEntity<ID> {
 
   private static final long serialVersionUID = 1L;
 
@@ -60,35 +61,52 @@ public abstract class AbstractEntity extends WithIdEntity {
   @Enumerated(value = EnumType.STRING)
   private DataStatusEnumeration dataStatus=DataStatusEnumeration.NORMARL;
 
-//  public String getCreatedBy() {
-//    return createdBy;
-//  }
-//
-//  public void setCreatedBy(String createdBy) {
-//    this.createdBy = createdBy;
-//  }
-//
-//  public Date getCreateDate() {
-//    return createdDate;
-//  }
-//
-//  public void setCreateDate(Date createDate) {
-//    this.createdDate = createDate;
-//  }
-//
-//  public String getLastModifiedBy() {
-//    return lastModifiedBy;
-//  }
-//
-//  public void setLastModifiedBy(String lastModifiedBy) {
-//    this.lastModifiedBy = lastModifiedBy;
-//  }
-//
-//  public Date getLastModifiedDate() {
-//    return lastModifiedDate;
-//  }
-//
-//  public void setLastModifiedDate(Date lastModifiedDate) {
-//    this.lastModifiedDate = lastModifiedDate;
-//  }
+
+
+
+
+
+
+
+
+
+  public String getCreatedBy() {
+    return createdBy;
+  }
+
+  public void setCreatedBy(String createdBy) {
+    this.createdBy = createdBy;
+  }
+
+  public Date getCreatedDate() {
+    return createdDate;
+  }
+
+  public void setCreatedDate(Date createdDate) {
+    this.createdDate = createdDate;
+  }
+
+  public String getLastModifiedBy() {
+    return lastModifiedBy;
+  }
+
+  public void setLastModifiedBy(String lastModifiedBy) {
+    this.lastModifiedBy = lastModifiedBy;
+  }
+
+  public Date getLastModifiedDate() {
+    return lastModifiedDate;
+  }
+
+  public void setLastModifiedDate(Date lastModifiedDate) {
+    this.lastModifiedDate = lastModifiedDate;
+  }
+
+  public DataStatusEnumeration getDataStatus() {
+    return dataStatus;
+  }
+
+  public void setDataStatus(DataStatusEnumeration dataStatus) {
+    this.dataStatus = dataStatus;
+  }
 }

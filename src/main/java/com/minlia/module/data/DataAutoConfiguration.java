@@ -4,10 +4,13 @@ import com.minlia.module.data.batis.DataBatisConfiguration;
 import com.minlia.module.data.jpa.DataJpaConfiguration;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.repository.Repository;
 
 /**
  * Minlia Data Auto Configuration
@@ -39,7 +42,7 @@ public class DataAutoConfiguration {
 //  @EnableSpringDataWebSupport
   @Import(value = { DataJpaConfiguration.class})
   @EntityScan(basePackages = { ".**.entity","org.springframework.data.jpa.convert.threeten"})
-  @EnableJpaRepositories(value = {".**.repository"}, considerNestedRepositories = true, transactionManagerRef = "jpaTransactionManager")
+  @EnableJpaRepositories(value = {".**.repository"}, considerNestedRepositories = true, transactionManagerRef = "jpaTransactionManager")//,includeFilters={@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,value = Repository.class)}
   @EnableJpaAuditing
   public static class ImportDataJpaConfiguration {//  extends WebMvcConfigurationSupport {
 

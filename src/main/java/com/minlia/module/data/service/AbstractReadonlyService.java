@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
  * @author will
  * @since 2.0.3
  */
-public interface AbstractFindService<ENTITY, QUERY extends AbstractQueryRequestBody> {
+public interface AbstractReadonlyService<ENTITY, QUERY extends AbstractQueryRequestBody> {
 
   /**
    * paginated returning according query request body and pageable

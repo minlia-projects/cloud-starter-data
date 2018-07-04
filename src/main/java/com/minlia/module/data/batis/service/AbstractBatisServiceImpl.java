@@ -1,12 +1,11 @@
 package com.minlia.module.data.batis.service;
 
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
 import com.minlia.module.data.adapter.PageResponseBodyAdapter;
-import com.minlia.module.data.batis.abstraction.AbstractMapper;
 import com.minlia.module.data.body.AbstractQueryRequestBody;
 import com.minlia.module.data.body.PageResponseBody;
-import com.minlia.module.data.service.AbstractFindService;
+import com.minlia.module.data.interfaces.AbstractRawService;
+import com.minlia.module.data.service.AbstractReadonlyService;
 import java.io.Serializable;
 import java.util.List;
 import org.apache.commons.collections4.IteratorUtils;
@@ -19,10 +18,11 @@ import org.springframework.util.CollectionUtils;
 /**
  * @author will
  */
-public abstract class AbstractBatisServiceImpl<MAPPER extends AbstractMapper<ENTITY>, ENTITY extends Serializable, ID extends Serializable, QUERY extends AbstractQueryRequestBody> extends
-    ServiceImpl<MAPPER, ENTITY> implements
+public abstract class AbstractBatisServiceImpl<ENTITY extends Serializable, ID extends Serializable, QUERY extends AbstractQueryRequestBody>
+  extends AbstractRawService<ENTITY,ID>
+     implements
     AbstractBatisService<ENTITY, ID, QUERY>,
-    AbstractFindService<ENTITY, QUERY> {
+    AbstractReadonlyService<ENTITY, QUERY> {
 
 
   /**
@@ -30,7 +30,7 @@ public abstract class AbstractBatisServiceImpl<MAPPER extends AbstractMapper<ENT
    */
   @Override
   public ENTITY getOne(ID id) {
-    return this.baseMapper.selectById(id);
+    return getBatisDao().selectById(id);
   }
 
   /**
@@ -38,7 +38,7 @@ public abstract class AbstractBatisServiceImpl<MAPPER extends AbstractMapper<ENT
    */
   @Override
   public ENTITY save(ENTITY entity) {
-    baseMapper.insert(entity);
+    getBatisDao().insert(entity);
     return entity;
   }
 
@@ -49,7 +49,7 @@ public abstract class AbstractBatisServiceImpl<MAPPER extends AbstractMapper<ENT
   public Iterable<ENTITY> saveAll(Iterable<ENTITY> entities) {
     List<ENTITY> result = Lists.newArrayList();
     for (ENTITY entity : entities) {
-      baseMapper.insert(entity);
+      getBatisDao().insert(entity);
       result.add(entity);
     }
     return result;
@@ -60,7 +60,7 @@ public abstract class AbstractBatisServiceImpl<MAPPER extends AbstractMapper<ENT
    */
   @Override
   public ENTITY update(ENTITY entity) {
-    baseMapper.update(entity, null);
+    getBatisDao().update(entity, null);
     return entity;
   }
 
@@ -70,7 +70,7 @@ public abstract class AbstractBatisServiceImpl<MAPPER extends AbstractMapper<ENT
    */
   @Override
   public Boolean deleteOne(ID id) {
-    baseMapper.deleteById(id);
+    getBatisDao().deleteById(id);
     return Boolean.TRUE;
   }
 
@@ -80,7 +80,7 @@ public abstract class AbstractBatisServiceImpl<MAPPER extends AbstractMapper<ENT
    */
   @Override
   public Boolean deleteAll(Iterable<ID> entities) {
-    baseMapper.deleteBatchIds(CollectionUtils.arrayToList(entities));
+    getBatisDao().deleteBatchIds(CollectionUtils.arrayToList(entities));
     return Boolean.TRUE;
   }
 
@@ -90,7 +90,7 @@ public abstract class AbstractBatisServiceImpl<MAPPER extends AbstractMapper<ENT
    */
   @Override
   public Long count() {
-    return Long.parseLong(baseMapper.selectCount(null).toString());
+    return Long.parseLong(getBatisDao().selectCount(null).toString());
   }
 
   /**
@@ -98,7 +98,7 @@ public abstract class AbstractBatisServiceImpl<MAPPER extends AbstractMapper<ENT
    */
   @Override
   public Boolean exists(ID id) {
-    return baseMapper.selectById(id) == null ? Boolean.FALSE : Boolean.TRUE;
+    return getBatisDao().selectById(id) == null ? Boolean.FALSE : Boolean.TRUE;
   }
 
   //以下方法为 data 模块提供的功能
@@ -110,7 +110,7 @@ public abstract class AbstractBatisServiceImpl<MAPPER extends AbstractMapper<ENT
   @Override
   public Long count(QUERY queryRequestBody) {
     return Long
-        .parseLong(baseMapper.selectCount(getCountSpecification(queryRequestBody)).toString());
+        .parseLong(getBatisDao().selectCount(getCountSpecification(queryRequestBody)).toString());
   }
 
   /**
@@ -118,7 +118,7 @@ public abstract class AbstractBatisServiceImpl<MAPPER extends AbstractMapper<ENT
    */
   @Override
   public Boolean exists(QUERY queryRequestBody) {
-    return baseMapper.selectCount(getExistsSpecification(queryRequestBody)) > 0 ? Boolean.TRUE
+    return getBatisDao().selectCount(getExistsSpecification(queryRequestBody)) > 0 ? Boolean.TRUE
         : Boolean.FALSE;
   }
 
@@ -136,7 +136,7 @@ public abstract class AbstractBatisServiceImpl<MAPPER extends AbstractMapper<ENT
     page.setAscs(getSortPropertiesList(pageable, Direction.ASC));
     page.setDescs(getSortPropertiesList(pageable, Direction.DESC));
     com.baomidou.mybatisplus.plugins.Page<ENTITY> pagedResult = page
-        .setRecords(this.baseMapper.selectPage(page, getFindAllSpecification(queryRequestBody)));
+        .setRecords(getBatisDao().selectPage(page, getFindAllSpecification(queryRequestBody)));
     return PageResponseBodyAdapter.adapt(pagedResult);
   }
 

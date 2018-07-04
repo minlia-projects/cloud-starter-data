@@ -6,7 +6,7 @@ import com.minlia.module.data.body.AbstractQueryRequestBody;
 import com.minlia.module.data.body.PageResponseBody;
 import com.minlia.module.data.interfaces.IRawService;
 import com.minlia.module.data.jpa.abstraction.AbstractRepository;
-import com.minlia.module.data.service.AbstractFindService;
+import com.minlia.module.data.service.AbstractReadonlyService;
 import java.io.Serializable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -20,7 +20,7 @@ import org.springframework.data.jpa.domain.Specification;
 //@FunctionalInterface
 public interface AbstractJpaService<ENTITY extends Serializable, ID extends Serializable, QUERY extends AbstractQueryRequestBody> extends
     //with find service support
-    AbstractFindService<ENTITY, QUERY>,IRawService<ENTITY,ID> {
+    AbstractReadonlyService<ENTITY, QUERY>, IRawService<ENTITY, ID> {
 
   public AbstractRepository<ENTITY, ID> getJpaRepository();
 
@@ -73,7 +73,7 @@ public interface AbstractJpaService<ENTITY extends Serializable, ID extends Seri
    */
   @Override
   public default Boolean deleteAll(Iterable<ID> ids) {
-    for(ID id:ids) {
+    for (ID id : ids) {
       getJpaRepository().deleteById(id);
     }
     return Boolean.TRUE;
@@ -91,7 +91,6 @@ public interface AbstractJpaService<ENTITY extends Serializable, ID extends Seri
 
   /**
    * 统计总数
-   * @return
    */
   @Override
   public default Long count() {
@@ -100,31 +99,13 @@ public interface AbstractJpaService<ENTITY extends Serializable, ID extends Seri
 
   /**
    * ID是否存在
-   * @return
    */
   @Override
   public default Boolean exists(ID id) {
     return getJpaRepository().existsById(id);
   }
 
-
-
-
-
-
-
-
-
   //以下方法为 data 模块提供的功能
-
-
-
-
-
-
-
-
-
 
 
   /**
@@ -147,12 +128,11 @@ public interface AbstractJpaService<ENTITY extends Serializable, ID extends Seri
 
   /**
    * 根据条件查询是否存在此实体，存在返回TRUE, 不存在返回FALSE
-   *
-   * @return
    */
   @Override
   public default Boolean exists(QUERY queryRequestBody) {
-    return getJpaRepository().count(getExistsSpecification(queryRequestBody))>0?Boolean.TRUE:Boolean.FALSE;
+    return getJpaRepository().count(getExistsSpecification(queryRequestBody)) > 0 ? Boolean.TRUE
+        : Boolean.FALSE;
   }
 
 
@@ -160,20 +140,19 @@ public interface AbstractJpaService<ENTITY extends Serializable, ID extends Seri
    * 搜索条件应该由后台服务控制，所以都在实现类里面进行条件组装
    */
   public default Specification<ENTITY> getFindAllSpecification(
-      QUERY queryRequestBody){
+      QUERY queryRequestBody) {
     return null;
   }
 
   public default Specification<ENTITY> getExistsSpecification(
-      QUERY queryRequestBody){
+      QUERY queryRequestBody) {
     return null;
   }
 
   public default Specification<ENTITY> getCountSpecification(
-      QUERY queryRequestBody){
+      QUERY queryRequestBody) {
     return null;
   }
-
 
 
 }
