@@ -9,6 +9,8 @@ import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.data.annotation.CreatedBy;
@@ -36,34 +38,53 @@ public abstract class AbstractEntity<ID extends Serializable> extends WithIdEnti
   private static final long serialVersionUID = 1L;
 
   @CreatedBy
-  @ApiModelProperty(value = "创建者")
+  @ApiModelProperty(value = "Created by")
   private String createdBy;
 
 //  @NotNull
   @CreatedDate
   @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
   @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-  @ApiModelProperty(value = "创建时间")
+  @ApiModelProperty(value = "Created date")
   private Date createdDate ;
 
     @LastModifiedBy
-  @ApiModelProperty(value = "更新者")
+  @ApiModelProperty(value = "Last modified by")
   private String lastModifiedBy;
 
   @LastModifiedDate
   @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
   @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-  @ApiModelProperty(value = "更新时间")
+  @ApiModelProperty(value = "Last modified date")
   private Date lastModifiedDate ;
 
 
-  @ApiModelProperty(value = "数据状态")
+  @ApiModelProperty(value = "Data status")
   @Enumerated(value = EnumType.STRING)
-  private DataStatusEnumeration dataStatus=DataStatusEnumeration.NORMARL;
+  private DataStatusEnumeration dataStatus;
 
 
+  /**
+   * By default set data status to NORMAL
+   */
+  @PrePersist
+  public void prePersist(){
+    this.setDataStatus(DataStatusEnumeration.NORMARL);
+    this.setCreatedDate(new Date());
+    this.setLastModifiedDate(new Date());
+    //TODO set as guid of current user
+    this.setCreatedBy("//TODO as guid");
+  }
 
-
+  /**
+   * TODO The situation of mybatis needs to be considered
+   */
+  @PreUpdate
+  public void preUpdate(){
+    this.setLastModifiedDate(new Date());
+    //TODO set as guid of current user
+    this.setLastModifiedBy("//TODO as guid");
+  }
 
 
 

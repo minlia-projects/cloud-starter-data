@@ -29,7 +29,7 @@ public abstract class AbstractBatisServiceImpl<ENTITY extends Serializable, ID e
    * 根据ID获取
    */
   @Override
-  public ENTITY getOne(ID id) {
+  public ENTITY findOne(ID id) {
     return getBatisDao().selectById(id);
   }
 

@@ -6,7 +6,7 @@ public interface IOperations<ENTITY extends Serializable, ID extends Serializabl
 
   // find - one
 
-  ENTITY getOne(final ID id);
+  ENTITY findOne(final ID id);
 
   // save
 
