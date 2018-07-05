@@ -5,7 +5,7 @@ import com.minlia.module.data.adapter.PageResponseBodyAdapter;
 import com.minlia.module.data.body.AbstractQueryRequestBody;
 import com.minlia.module.data.body.PageResponseBody;
 import com.minlia.module.data.interfaces.AbstractRawService;
-import com.minlia.module.data.service.AbstractReadonlyService;
+import com.minlia.module.data.service.AbstractConditionalService;
 import java.io.Serializable;
 import java.util.List;
 import org.apache.commons.collections4.IteratorUtils;
@@ -19,10 +19,10 @@ import org.springframework.util.CollectionUtils;
  * @author will
  */
 public abstract class AbstractBatisServiceImpl<ENTITY extends Serializable, ID extends Serializable, QUERY extends AbstractQueryRequestBody>
-  extends AbstractRawService<ENTITY,ID>
-     implements
+    extends AbstractRawService<ENTITY, ID>
+    implements
     AbstractBatisService<ENTITY, ID, QUERY>,
-    AbstractReadonlyService<ENTITY, QUERY> {
+    AbstractConditionalService<ENTITY, QUERY> {
 
 
   /**
@@ -108,7 +108,7 @@ public abstract class AbstractBatisServiceImpl<ENTITY extends Serializable, ID e
    * 获取查询条件的结果数
    */
   @Override
-  public Long count(QUERY queryRequestBody) {
+  public Long countByCondition(QUERY queryRequestBody) {
     return Long
         .parseLong(getBatisDao().selectCount(getCountSpecification(queryRequestBody)).toString());
   }
@@ -117,19 +117,22 @@ public abstract class AbstractBatisServiceImpl<ENTITY extends Serializable, ID e
    * 根据条件查询是否存在此实体，存在返回TRUE, 不存在返回FALSE
    */
   @Override
-  public Boolean exists(QUERY queryRequestBody) {
+  public Boolean existsByCondition(QUERY queryRequestBody) {
     return getBatisDao().selectCount(getExistsSpecification(queryRequestBody)) > 0 ? Boolean.TRUE
         : Boolean.FALSE;
   }
 
+  @Override
+  public Integer deleteByCondition(QUERY queryRequestBody) {
+    return getBatisDao().delete(getDeleteByConditionSpecification(queryRequestBody));
+  }
+
 
   @Override
-  public PageResponseBody<ENTITY> findAll(QUERY queryRequestBody,
+  public PageResponseBody<ENTITY> findAllByCondition(QUERY queryRequestBody,
       Pageable pageable) {
     com.baomidou.mybatisplus.plugins.Page<ENTITY> page = new com.baomidou.mybatisplus.plugins.Page<ENTITY>();
-
     //当jpa oneBasedIndexParameter时需要+1
-
     page.setCurrent(pageable.getPageNumber() + 1);
     page.setSize(pageable.getPageSize());
 
@@ -142,7 +145,7 @@ public abstract class AbstractBatisServiceImpl<ENTITY extends Serializable, ID e
 
 
   @Override
-  public List<ENTITY> findAll(QUERY queryRequestBody) {
+  public List<ENTITY> findAllByCondition(QUERY queryRequestBody) {
     return getBatisDao().selectList(getFindAllSpecification(queryRequestBody));
   }
 

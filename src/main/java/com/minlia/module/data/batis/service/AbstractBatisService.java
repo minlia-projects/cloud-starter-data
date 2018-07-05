@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.minlia.module.data.batis.abstraction.AbstractMapper;
 import com.minlia.module.data.body.AbstractQueryRequestBody;
 import com.minlia.module.data.interfaces.IRawService;
-import com.minlia.module.data.service.AbstractReadonlyService;
+import com.minlia.module.data.service.AbstractConditionalService;
 import java.io.Serializable;
 
 /**
@@ -13,9 +13,10 @@ import java.io.Serializable;
  */
 public interface AbstractBatisService<ENTITY extends Serializable, ID extends Serializable, QUERY extends AbstractQueryRequestBody> extends
     //with find service support
-    AbstractReadonlyService<ENTITY, QUERY>, IRawService<ENTITY, ID> {
+    AbstractConditionalService<ENTITY, QUERY>, IRawService<ENTITY, ID> {
 
   public AbstractMapper<ENTITY> getBatisDao();
+
   /**
    * 搜索条件应该由后台服务控制，所以都在实现类里面进行条件组装
    */
@@ -29,6 +30,11 @@ public interface AbstractBatisService<ENTITY extends Serializable, ID extends Se
   }
 
   public default EntityWrapper<ENTITY> getCountSpecification(
+      QUERY queryRequestBody) {
+    return null;
+  }
+
+  public default EntityWrapper<ENTITY> getDeleteByConditionSpecification(
       QUERY queryRequestBody) {
     return null;
   }

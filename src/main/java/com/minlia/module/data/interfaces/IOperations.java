@@ -28,7 +28,7 @@ public interface IOperations<ENTITY extends Serializable, ID extends Serializabl
 
   Boolean deleteAll(Iterable<ID> ids);
 
-  // count
+  // countByCondition
 
   Long count();
 

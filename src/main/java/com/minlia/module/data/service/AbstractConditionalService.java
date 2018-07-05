@@ -11,31 +11,39 @@ import org.springframework.data.domain.Pageable;
  * @author will
  * @since 2.0.3
  */
-public interface AbstractReadonlyService<ENTITY, QUERY extends AbstractQueryRequestBody> {
+public interface AbstractConditionalService<ENTITY, QUERY extends AbstractQueryRequestBody> {
 
   /**
    * paginated returning according query request body and pageable
    */
-  public PageResponseBody<ENTITY> findAll(QUERY queryRequestBody, Pageable pageable);
+  public PageResponseBody<ENTITY> findAllByCondition(QUERY queryRequestBody, Pageable pageable);
 
   /**
    * list returning according query request body and pageable
    * @param queryRequestBody
    * @return
    */
-  public List<ENTITY> findAll(QUERY queryRequestBody);
+  public List<ENTITY> findAllByCondition(QUERY queryRequestBody);
 
   /**
    *
    * @param queryRequestBody
    * @return
    */
-  public Long count(QUERY queryRequestBody);
+  public Long countByCondition(QUERY queryRequestBody);
 
   /**
    *
    * @param queryRequestBody
    * @return
    */
-  public Boolean exists(QUERY queryRequestBody);
+  public Boolean existsByCondition(QUERY queryRequestBody);
+
+  /**
+   *
+   * @param queryRequestBody
+   * @return
+   */
+  public Integer deleteByCondition(QUERY queryRequestBody);
+
 }

@@ -6,7 +6,7 @@ import com.minlia.module.data.body.AbstractQueryRequestBody;
 import com.minlia.module.data.body.PageResponseBody;
 import com.minlia.module.data.interfaces.IRawService;
 import com.minlia.module.data.jpa.abstraction.AbstractRepository;
-import com.minlia.module.data.service.AbstractReadonlyService;
+import com.minlia.module.data.service.AbstractConditionalService;
 import java.io.Serializable;
 import java.util.List;
 import org.springframework.data.domain.Example;
@@ -22,7 +22,7 @@ import org.springframework.data.jpa.domain.Specification;
 //@FunctionalInterface
 public interface AbstractJpaService<ENTITY extends Serializable, ID extends Serializable, QUERY extends AbstractQueryRequestBody> extends
     //with find service support
-    AbstractReadonlyService<ENTITY, QUERY>, IRawService<ENTITY, ID> {
+    AbstractConditionalService<ENTITY, QUERY>, IRawService<ENTITY, ID> {
 
   public AbstractRepository<ENTITY, ID> getJpaRepository();
 
@@ -114,18 +114,19 @@ public interface AbstractJpaService<ENTITY extends Serializable, ID extends Seri
    * 搜索条件应该由后台服务控制，所以都在实现类里面进行条件组装
    */
   @Override
-  public default PageResponseBody<ENTITY> findAll(QUERY queryRequestBody,
+  public default PageResponseBody<ENTITY> findAllByCondition(QUERY queryRequestBody,
       Pageable pageable) {
     return PageResponseBodyAdapter.adapt(
         getJpaRepository().findAll(getFindAllSpecification(queryRequestBody), pageable));
   }
 
   @Override
-  public default List<ENTITY> findAll(QUERY queryRequestBody) {
+  public default List<ENTITY> findAllByCondition(QUERY queryRequestBody) {
     return getJpaRepository().findAll(getFindAllSpecification(queryRequestBody));
   }
 
-  public default PageResponseBody<ENTITY> findAll(Example<ENTITY> entityExample,Pageable pageable) {
+  public default PageResponseBody<ENTITY> findAllByCondition(Example<ENTITY> entityExample,
+      Pageable pageable) {
     return PageResponseBodyAdapter.adapt(
         getJpaRepository().findAll(entityExample, pageable));
   }
@@ -134,7 +135,7 @@ public interface AbstractJpaService<ENTITY extends Serializable, ID extends Seri
    * 获取查询条件的结果数
    */
   @Override
-  public default Long count(QUERY queryRequestBody) {
+  public default Long countByCondition(QUERY queryRequestBody) {
     return getJpaRepository().count(getCountSpecification(queryRequestBody));
   }
 
@@ -142,9 +143,24 @@ public interface AbstractJpaService<ENTITY extends Serializable, ID extends Seri
    * 根据条件查询是否存在此实体，存在返回TRUE, 不存在返回FALSE
    */
   @Override
-  public default Boolean exists(QUERY queryRequestBody) {
+  public default Boolean existsByCondition(QUERY queryRequestBody) {
     return getJpaRepository().count(getExistsSpecification(queryRequestBody)) > 0 ? Boolean.TRUE
         : Boolean.FALSE;
+  }
+
+  /**
+   * 根据条件删除实体， 并返回删除的总数
+   */
+  @Override
+  public default Integer deleteByCondition(QUERY queryRequestBody) {
+    Integer count = 0;
+    List<ENTITY> found = getJpaRepository()
+        .findAll(getDeleteByConditionSpecification(queryRequestBody));
+    for (ENTITY entity : found) {
+      count++;
+      getJpaRepository().delete(entity);
+    }
+    return count;
   }
 
 
@@ -157,6 +173,11 @@ public interface AbstractJpaService<ENTITY extends Serializable, ID extends Seri
   }
 
   public default Specification<ENTITY> getExistsSpecification(
+      QUERY queryRequestBody) {
+    return null;
+  }
+
+  public default Specification<ENTITY> getDeleteByConditionSpecification(
       QUERY queryRequestBody) {
     return null;
   }
