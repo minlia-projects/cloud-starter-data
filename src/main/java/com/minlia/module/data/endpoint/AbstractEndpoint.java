@@ -12,6 +12,7 @@ import com.minlia.module.data.interfaces.IRawService;
 import com.minlia.module.data.service.AbstractReadonlyService;
 import io.swagger.annotations.ApiOperation;
 import java.io.Serializable;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -43,7 +44,7 @@ public abstract class AbstractEndpoint<ENTITY extends Serializable, ID extends S
   @ApiOperation(value = "Create")
   public ResponseEntity<StatefulBody<ENTITY>> create(@RequestBody ENTITY entity) {
     ENTITY created = getRawService().save(entity);
-    return Responses.ok(SuccessResponseBody.builder()
+    return Responses.created(SuccessResponseBody.builder()
         .payload(created).build());
   }
 
@@ -105,11 +106,21 @@ public abstract class AbstractEndpoint<ENTITY extends Serializable, ID extends S
    * 使用  @Pretend(value = "**,-payload.items.code") 进行结果排除，不需要此字段在前端展示
    */
   @PostMapping(value = "/findAll", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
-  @ApiOperation(value = "Find all")
+  @ApiOperation(value = "Find all with paginated result")
   public ResponseEntity<StatefulBody<PageResponseBody<ENTITY>>> findAll(@RequestBody QUERY requestBody,
       @PageableDefault Pageable pageable) {
     return Responses.ok(SuccessResponseBody.builder()
         .payload(getReadonlyService().findAll(requestBody, pageable)).build());
+  }
+
+  /**
+   * 使用  @Pretend(value = "**,-payload.items.code") 进行结果排除，不需要此字段在前端展示
+   */
+  @PostMapping(value = "/findAllList", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+  @ApiOperation(value = "Find all with list result")
+  public ResponseEntity<StatefulBody<List<ENTITY>>> findAllList(@RequestBody QUERY requestBody) {
+    return Responses.ok(SuccessResponseBody.builder()
+        .payload(getReadonlyService().findAll(requestBody)).build());
   }
 
 }
