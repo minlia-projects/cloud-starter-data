@@ -38,6 +38,7 @@ public abstract class AbstractBatisServiceImpl<ENTITY extends Serializable, ID e
    */
   @Override
   public ENTITY save(ENTITY entity) {
+    //TODO 添加事件
     getBatisDao().insert(entity);
     return entity;
   }

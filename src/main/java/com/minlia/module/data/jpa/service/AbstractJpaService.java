@@ -40,6 +40,7 @@ public interface AbstractJpaService<ENTITY extends Serializable, ID extends Seri
    */
   @Override
   public default ENTITY save(ENTITY entity) {
+    //TODO 添加事件
     return getJpaRepository().save(entity);
   }
 

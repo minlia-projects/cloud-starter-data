@@ -29,6 +29,8 @@ public interface FindPaginatedByConditionEndpoint<ENTITY extends Serializable,QU
   @ApiOperation(value = "Find all by conditions with paginated result")
   public default ResponseEntity<StatefulBody<PageResponseBody<ENTITY>>> findPaginated(
       @RequestBody QUERY requestBody,
+
+      //由于自带的放出去接口不太清晰，需要定义一个，然后在service层进行Pageable转换
       @PageableDefault Pageable pageable) {
     return Responses.ok(SuccessResponseBody.builder()
         .payload(getConditionalService().findAllByCondition(requestBody, pageable)).build());

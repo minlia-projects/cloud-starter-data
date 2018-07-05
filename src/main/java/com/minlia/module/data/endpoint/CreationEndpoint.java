@@ -19,6 +19,8 @@ public interface CreationEndpoint<ENTITY extends Serializable, ID extends Serial
   @Autowired
   public abstract IRawService<ENTITY, ID> getRawService();
 
+
+  //TODO 添加权限点控制
   @PostMapping(value = "/create", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
   @ApiOperation(value = "Create")
   public default ResponseEntity<StatefulBody<ENTITY>> create(@RequestBody ENTITY entity) {
