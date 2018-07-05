@@ -2,6 +2,7 @@ package com.minlia.module.data.service;
 
 import com.minlia.module.data.body.AbstractQueryRequestBody;
 import com.minlia.module.data.body.PageResponseBody;
+import java.util.List;
 import org.springframework.data.domain.Pageable;
 
 /**
@@ -16,6 +17,13 @@ public interface AbstractReadonlyService<ENTITY, QUERY extends AbstractQueryRequ
    * paginated returning according query request body and pageable
    */
   public PageResponseBody<ENTITY> findAll(QUERY queryRequestBody, Pageable pageable);
+
+  /**
+   * list returning according query request body and pageable
+   * @param queryRequestBody
+   * @return
+   */
+  public List<ENTITY> findAll(QUERY queryRequestBody);
 
   /**
    *

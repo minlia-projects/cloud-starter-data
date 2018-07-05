@@ -141,6 +141,11 @@ public abstract class AbstractBatisServiceImpl<ENTITY extends Serializable, ID e
   }
 
 
+  @Override
+  public List<ENTITY> findAll(QUERY queryRequestBody) {
+    return getBatisDao().selectList(getFindAllSpecification(queryRequestBody));
+  }
+
   private List<String> getSortPropertiesList(Pageable pageable, Direction direction) {
     List<String> result = Lists.newArrayList();
     if (null != pageable.getSort()) {

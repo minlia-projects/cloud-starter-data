@@ -8,6 +8,7 @@ import com.minlia.module.data.interfaces.IRawService;
 import com.minlia.module.data.jpa.abstraction.AbstractRepository;
 import com.minlia.module.data.service.AbstractReadonlyService;
 import java.io.Serializable;
+import java.util.List;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -117,6 +118,11 @@ public interface AbstractJpaService<ENTITY extends Serializable, ID extends Seri
       Pageable pageable) {
     return PageResponseBodyAdapter.adapt(
         getJpaRepository().findAll(getFindAllSpecification(queryRequestBody), pageable));
+  }
+
+  @Override
+  public default List<ENTITY> findAll(QUERY queryRequestBody) {
+    return getJpaRepository().findAll(getFindAllSpecification(queryRequestBody));
   }
 
   public default PageResponseBody<ENTITY> findAll(Example<ENTITY> entityExample,Pageable pageable) {
