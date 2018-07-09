@@ -1,17 +1,26 @@
-package com.minlia.module.data.jpa.service;
+package com.minlia.module.data.jpa.abstraction.service;
 
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.google.common.base.CaseFormat;
+import com.minlia.module.data.abstraction.service.ConditionalService;
 import com.minlia.module.data.adapter.PageResponseBodyAdapter;
 import com.minlia.module.data.body.AbstractQueryRequestBody;
 import com.minlia.module.data.body.PageResponseBody;
+import com.minlia.module.data.body.ToggleRequestBody;
 import com.minlia.module.data.interfaces.IRawService;
 import com.minlia.module.data.jpa.abstraction.AbstractRepository;
-import com.minlia.module.data.service.AbstractConditionalService;
+import com.minlia.module.data.util.ReflectUtil;
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.util.ReflectionUtils;
 
 
 /**
@@ -22,7 +31,7 @@ import org.springframework.data.jpa.domain.Specification;
 //@FunctionalInterface
 public interface AbstractJpaService<ENTITY extends Serializable, ID extends Serializable, QUERY extends AbstractQueryRequestBody> extends
     //with find service support
-    AbstractConditionalService<ENTITY, QUERY>, IRawService<ENTITY, ID> {
+    ConditionalService<ENTITY, QUERY>, IRawService<ENTITY, ID> {
 
   public AbstractRepository<ENTITY, ID> getJpaRepository();
 
@@ -106,6 +115,14 @@ public interface AbstractJpaService<ENTITY extends Serializable, ID extends Seri
   @Override
   public default Boolean exists(ID id) {
     return getJpaRepository().existsById(id);
+  }
+
+  @Override
+  default ENTITY toggle(ToggleRequestBody toggleRequestBody) {
+//    ENTITY entity=getJpaRepository().findById((ID)toggleRequestBody.getId()).get();
+//    entity=(ENTITY)ReflectUtil.setValue(entity,toggleRequestBody.getProperty(),toggleRequestBody.getValue());
+//    getJpaRepository().save(entity);
+    return null;
   }
 
   //以下方法为 data 模块提供的功能

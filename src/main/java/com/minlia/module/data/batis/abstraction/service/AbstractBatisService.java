@@ -1,10 +1,10 @@
-package com.minlia.module.data.batis.service;
+package com.minlia.module.data.batis.abstraction.service;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.minlia.module.data.batis.abstraction.AbstractMapper;
 import com.minlia.module.data.body.AbstractQueryRequestBody;
 import com.minlia.module.data.interfaces.IRawService;
-import com.minlia.module.data.service.AbstractConditionalService;
+import com.minlia.module.data.abstraction.service.ConditionalService;
 import java.io.Serializable;
 
 /**
@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 public interface AbstractBatisService<ENTITY extends Serializable, ID extends Serializable, QUERY extends AbstractQueryRequestBody> extends
     //with find service support
-    AbstractConditionalService<ENTITY, QUERY>, IRawService<ENTITY, ID> {
+    ConditionalService<ENTITY, QUERY>, IRawService<ENTITY, ID> {
 
   public AbstractMapper<ENTITY> getBatisDao();
 

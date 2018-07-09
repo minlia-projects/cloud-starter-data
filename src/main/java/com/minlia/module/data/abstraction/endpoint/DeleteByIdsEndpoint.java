@@ -1,5 +1,6 @@
-package com.minlia.module.data.endpoint;
+package com.minlia.module.data.abstraction.endpoint;
 
+import com.minlia.cloud.loggable.annotation.Loggable;
 import com.minlia.cloud.stateful.Responses;
 import com.minlia.cloud.stateful.body.StatefulBody;
 import com.minlia.cloud.stateful.body.WithIdBody;
@@ -19,11 +20,12 @@ public interface DeleteByIdsEndpoint<ENTITY extends Serializable, ID extends Ser
 
   @Autowired
   public abstract IRawService<ENTITY, ID> getRawService();
-
+  //TODO 添加权限点控制
+  @Loggable
   @DeleteMapping(value = "/deleteByIds", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
   @ApiOperation(value = "Delete by ids")
   public default ResponseEntity<StatefulBody<ENTITY>> delete(
-      @RequestBody WithIdItemBody requestBody) {
+      @RequestBody WithIdItemBody<ID> requestBody) {
     if (null != requestBody && null != requestBody.getItems()) {
       for (WithIdBody withIdBody : requestBody.getItems()) {
         getRawService().deleteOne((ID) withIdBody.getId());

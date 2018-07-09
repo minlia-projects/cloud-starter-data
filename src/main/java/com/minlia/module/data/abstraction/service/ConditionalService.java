@@ -1,4 +1,4 @@
-package com.minlia.module.data.service;
+package com.minlia.module.data.abstraction.service;
 
 import com.minlia.module.data.body.AbstractQueryRequestBody;
 import com.minlia.module.data.body.PageResponseBody;
@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
  * @author will
  * @since 2.0.3
  */
-public interface AbstractConditionalService<ENTITY, QUERY extends AbstractQueryRequestBody> {
+public interface ConditionalService<ENTITY, QUERY extends AbstractQueryRequestBody> {
 
   /**
    * paginated returning according query request body and pageable

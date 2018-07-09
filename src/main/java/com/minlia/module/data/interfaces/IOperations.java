@@ -1,5 +1,6 @@
 package com.minlia.module.data.interfaces;
 
+import com.minlia.module.data.body.ToggleRequestBody;
 import java.io.Serializable;
 
 public interface IOperations<ENTITY extends Serializable, ID extends Serializable> {
@@ -20,6 +21,10 @@ public interface IOperations<ENTITY extends Serializable, ID extends Serializabl
 
   ENTITY update(final ENTITY resource);
 
+//  // update
+//
+//  WithResultBody<ENTITY> enable(final ID id);
+
   // delete
 
   Boolean deleteOne(final ID id);
@@ -35,4 +40,5 @@ public interface IOperations<ENTITY extends Serializable, ID extends Serializabl
   Boolean exists(final ID id);
 
 
+  ENTITY toggle(ToggleRequestBody<ID> toggleRequestBody);
 }

@@ -1,11 +1,16 @@
-package com.minlia.module.data.batis.service;
+package com.minlia.module.data.batis.abstraction.service;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.google.common.collect.Lists;
+import com.minlia.cloud.stateful.body.WithResultBody;
 import com.minlia.module.data.adapter.PageResponseBodyAdapter;
 import com.minlia.module.data.body.AbstractQueryRequestBody;
 import com.minlia.module.data.body.PageResponseBody;
+import com.minlia.module.data.body.ToggleRequestBody;
 import com.minlia.module.data.interfaces.AbstractRawService;
-import com.minlia.module.data.service.AbstractConditionalService;
+import com.minlia.module.data.abstraction.service.ConditionalService;
+import com.minlia.module.data.util.ReflectUtil;
 import java.io.Serializable;
 import java.util.List;
 import org.apache.commons.collections4.IteratorUtils;
@@ -22,7 +27,7 @@ public abstract class AbstractBatisServiceImpl<ENTITY extends Serializable, ID e
     extends AbstractRawService<ENTITY, ID>
     implements
     AbstractBatisService<ENTITY, ID, QUERY>,
-    AbstractConditionalService<ENTITY, QUERY> {
+    ConditionalService<ENTITY, QUERY> {
 
 
   /**
@@ -65,6 +70,20 @@ public abstract class AbstractBatisServiceImpl<ENTITY extends Serializable, ID e
     return entity;
   }
 
+//  /**
+//   * 修改
+//   */
+//  @Override
+//  public WithResultBody<ENTITY> update(ENTITY entity) {
+//    getBatisDao().update(entity, new Wrapper<ENTITY>() {
+//      @Override
+//      public String getSqlSegment() {
+//        return null;
+//      }
+//    });
+//    return new WithResultBody().setResult();
+//  }
+
 
   /**
    * 根据Id删除
@@ -102,7 +121,23 @@ public abstract class AbstractBatisServiceImpl<ENTITY extends Serializable, ID e
     return getBatisDao().selectById(id) == null ? Boolean.FALSE : Boolean.TRUE;
   }
 
-  //以下方法为 data 模块提供的功能
+
+  /**
+   * toggle 一般用于更新状态
+   * @param toggleRequestBody
+   * @return
+   */
+  @Override
+  public  ENTITY toggle(ToggleRequestBody toggleRequestBody) {
+    //应该自已实现, 统一实现会有安全问题，导致可以设置任意属性
+//    ENTITY entity=getBatisDao().selectById(toggleRequestBody.getId());
+//    entity=(ENTITY)ReflectUtil.setValue(entity,toggleRequestBody.getProperty(),toggleRequestBody.getValue());
+//    getBatisDao().update(entity,null);
+    return null;
+  }
+
+
+//以下方法为 data 模块提供的功能
 
 
   /*

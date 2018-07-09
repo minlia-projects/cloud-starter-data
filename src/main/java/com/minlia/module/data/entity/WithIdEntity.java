@@ -2,6 +2,7 @@ package com.minlia.module.data.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.minlia.cloud.stateful.generator.SnowFlakeUtil;
@@ -16,12 +17,13 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.annotations.Type;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonAutoDetect(
-    fieldVisibility = JsonAutoDetect.Visibility.DEFAULT,
-    getterVisibility = JsonAutoDetect.Visibility.NONE,
-    setterVisibility = JsonAutoDetect.Visibility.NONE,
-    isGetterVisibility = JsonAutoDetect.Visibility.NONE,
-    creatorVisibility = JsonAutoDetect.Visibility.NONE)
+//@JsonAutoDetect(
+//    fieldVisibility = JsonAutoDetect.Visibility.ANY,
+//    getterVisibility = JsonAutoDetect.Visibility.NONE,
+//    setterVisibility = JsonAutoDetect.Visibility.NONE,
+//    isGetterVisibility = JsonAutoDetect.Visibility.NONE,
+//    creatorVisibility = JsonAutoDetect.Visibility.NONE)
+@JsonIgnoreProperties(ignoreUnknown=true)
 @MappedSuperclass
 public abstract class WithIdEntity<ID extends Serializable> implements Serializable {
   private static final long serialVersionUID = 1L;

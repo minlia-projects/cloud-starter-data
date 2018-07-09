@@ -1,8 +1,9 @@
-package com.minlia.module.data.endpoint;
+package com.minlia.module.data.abstraction.endpoint;
 
+import com.minlia.cloud.loggable.annotation.Loggable;
 import com.minlia.module.data.body.AbstractQueryRequestBody;
 import com.minlia.module.data.interfaces.IRawService;
-import com.minlia.module.data.service.AbstractConditionalService;
+import com.minlia.module.data.abstraction.service.ConditionalService;
 import java.io.Serializable;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author will
  * @since 2.0.3
  */
+@Loggable
 public interface AbstractEndpoint<ENTITY extends Serializable, ID extends Serializable, QUERY extends AbstractQueryRequestBody> extends
     CreationEndpoint<ENTITY, ID>
     , FindOneByIdEndpoint<ENTITY, ID>
@@ -36,7 +38,7 @@ public interface AbstractEndpoint<ENTITY extends Serializable, ID extends Serial
    */
   @Override
   @Autowired
-  public abstract AbstractConditionalService<ENTITY, QUERY> getConditionalService();
+  public abstract ConditionalService<ENTITY, QUERY> getConditionalService();
 
   //以下方法已抽离成多个接口
 
